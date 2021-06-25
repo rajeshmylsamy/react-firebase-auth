@@ -21,8 +21,8 @@ export default function ForgotPassword() {
 			setMessage(
 				"check your inbox for password reset instructions to proceed further"
 			);
-		} catch {
-			setError("Failed to Reset Password");
+		} catch (e) {
+			setError(e.message);
 		}
 		setLoading(false);
 	}

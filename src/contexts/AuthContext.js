@@ -11,6 +11,7 @@ export function AuthProvider({ children }) {
 	const [currentUser, setCurrentUser] = useState();
 	const [currentPhone, setCurrentPhone] = useState();
 	const [confirmationResult, setConfirmationResult] = useState();
+	let recaptchaVerifier = null;
 
 	const [loading, setLoading] = useState(true);
 
@@ -38,16 +39,23 @@ export function AuthProvider({ children }) {
 		return currentUser.updatePassword(password);
 	}
 
-	function signinWithPhone(phoneNumber, recaptchaVerifier) {		
-		firebase.auth().signInWithPhoneNumber(phoneNumber, recaptchaVerifier)
+	function signinWithPhone(phoneNumber) {
+		if (recaptchaVerifier == null) { 
+		recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+				'size': 'invisible',
+				'callback': (response) => {
+					// reCAPTCHA solved, allow signInWithPhoneNumber.
+					console.log("reCAPTCHA solved")
+				}
+			});
+		}
+		return firebase.auth().signInWithPhoneNumber(phoneNumber, recaptchaVerifier)
 			.then((confirmResult) => {
 				// SMS sent. Prompt user to type the code from the message, then sign the
 				// user in with confirmationResult.confirm(code).
 				console.log("SMS sent")
 				setCurrentPhone(phoneNumber);
 				setConfirmationResult(confirmResult);
-			}).catch(e => {
-				console.log("error in handle submit " + e)
 			});
 	}
 	//+919066224825  //  +918220363505

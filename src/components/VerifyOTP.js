@@ -22,7 +22,7 @@ export default function VerifyOTP() {
 			history.push("/");
 		} catch (e) {
 			console.log("error in handle submit " + e)
-			setError("Failed to Sign In");
+			setError(e.message);
 		}
 		setLoading(false);
 	}

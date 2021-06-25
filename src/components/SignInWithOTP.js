@@ -22,18 +22,11 @@ export default function SignInWithOTP() {
 			setError("");
 			setLoading(true);
 			console.log("phoneNumber " + phoneRef.current.value);
-			const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
-				'size': 'invisible',
-				'callback': (response) => {
-					// reCAPTCHA solved, allow signInWithPhoneNumber.
-					console.log("reCAPTCHA solved")
-				}
-			});
-			await signinWithPhone(phoneRef.current.value, recaptchaVerifier);
+			await signinWithPhone(phoneRef.current.value);
 			history.push("/verifyotp");
 		} catch (e) {
 			console.log("error in handle submit " + e)
-			setError("Failed to Sign In");
+			setError(e.message);
 		}
 		setLoading(false);
 	}

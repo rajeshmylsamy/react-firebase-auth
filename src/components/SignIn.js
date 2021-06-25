@@ -24,7 +24,7 @@ export default function SignIn() {
 			history.push("/");
 		} catch (e) {
 			console.log(e)
-			setError("Failed to Sign In");
+			setError(e.message);
 		}
 		setLoading(false);
 	}
